@@ -1,21 +1,141 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<!-- Toolbar -->
 
-<router-outlet></router-outlet>
+<div class="gen-body">
+  <div class="toolbar" role="banner">    
+    <div style="margin-left: 5%;"><span>COVID-19 self risk assessment test</span></div>
+    <div class="spacer"></div>
+    <div style="margin-right: 5%;" >
+      <mat-chip-list aria-label="Fish selection">        
+        <mat-chip color="accent" selected (click)="quickTakeAway()">Quick TakeAway</mat-chip>
+      </mat-chip-list>
+    </div>
+
+  </div>
+
+  <div class="content panel-primary " role="main">
+
+    <!-- Next Steps -->
+
+    <div class="info-head panel-heading">
+      <h3>SELF RISK ASSESMENT (SRA)<br> </h3>       
+            Instant COVID-19 self risk assessment test          
+     <!-- <div style="text-align: center;">
+        <mat-chip-list aria-label="Fish selection">        
+            <mat-chip color="primary" selected>
+                <h5>Question {{pager.index + 1}} of {{pager.count}}</h5>
+            </mat-chip>
+        </mat-chip-list>
+     </div> -->
+ 
+    </div>
+    <hr>
+
+    <mat-card class="general" *ngIf="quiz">
+        <mat-card *ngFor="let question of filteredQuestions;">
+          
+            <div class="question">
+                 <h2> <small>{{pager.index + 1}}.</small> {{question.question}}</h2>
+                 <div style="text-align: right;"><img src="{{question.image}}" alt="" height="130"></div>
+            </div>
+              <div>
+              <button mat-mini-fab color="primary" value="NO" (click)="responseNow(question.No, 'NO'); goTo(pager.index + 1);">NO</button>
+              <button mat-mini-fab color="warn" value="YES" (click)="responseNow(question.No, 'YES'); goTo(pager.index + 1);">YES</button>
+              
+              </div>
+              </mat-card>     
+      <br>
+      <div>
+       
+        <div *ngIf="pager.index + 1 == pager.count && mode!='result'">
+            <!-- <button mat-raised-button color="primary" (click)="mode = 'quiz'">Quiz</button>             -->
+            <button mat-raised-button color="primary" (click)="submitNow()">Submit</button>
+          </div>
+    
+        </div>
+    </mat-card>
+
+    <div *ngIf="result">
+
+      <mat-card *ngIf="low" class="panel-success">
+          <div class="panel-heading">
+              Your RISK for COVID-19 is ::::: <strong>LOW</strong>
+          </div>  <div style="text-align: right;">
+              <button (click)="backToQuiz()" mat-raised-button color="warn">
+                  <mat-icon class="mat-18">clear</mat-icon> Close
+              </button>
+          </div> <hr>
+          <div>
+              Please ensure you do the following: <br>
+              <mat-list role="list">
+                  <mat-list-item role="listitem">1. Avoid crowds </mat-list-item>
+                  <mat-list-item role="listitem">2. maintain a physical distance of 1 metre or 2 to 3 steps from people.</mat-list-item>
+                  <mat-list-item role="listitem">3. Avoid shaking hands, hugging or kissing people with flu-like symptoms </mat-list-item>
+                  <mat-list-item role="listitem">4. Avoid Leaning on objects that are exposed </mat-list-item>
+                  <mat-list-item role="listitem">5. Wash Your hand regularly using Soap and water </mat-list-item>
+                  <mat-list-item role="listitem">6. Obey the laws and Regulations given by Government</mat-list-item>
+                </mat-list>          
+             
+              <small>----- This is to avoid Contracting of the virus . ----</small> <br> <br>
+           <strong> <i> N/B:  For more information on COVID-19, call 719 or *719#. You can also contact the Ministry of Health emergency teams on hotlines: 0729471414 and 0732353535 </i></strong>
+          </div>
+      </mat-card>
+
+      <mat-card *ngIf="moderate" class="panel-info">
+          
+          <div class="panel-heading">
+              Your RISK for COVID-19 is :::: <strong>MODORATE</strong>
+          </div><div style="text-align: right;">
+              <button (click)="backToQuiz()" mat-raised-button color="warn">
+                  <mat-icon class="mat-18">clear</mat-icon> Close
+              </button>
+          </div> <hr>
+          <div>
+              Please ensure you do the following: <br>
+              <mat-list role="list">
+                  <mat-list-item role="listitem">1. Stay at Home </mat-list-item>
+                  <mat-list-item role="listitem">2. Do not travel using Public means</mat-list-item>
+                  <mat-list-item role="listitem">3. Taake alot of warm water </mat-list-item>
+                  <mat-list-item role="listitem">4. Wash your hands regularly </mat-list-item>
+                  <mat-list-item role="listitem">5. Do not Share Towels or utensils </mat-list-item>
+                  <mat-list-item role="listitem">6. Obey the laws and Regulations given by Government</mat-list-item>
+                </mat-list>          
+             
+              <small>----- This is to avoid contracting or transmiting of the virus to friends and family. ----</small> <br> <br>
+           <strong> <i> N/B:  For more information on COVID-19, call 719 or *719#. You can also contact the Ministry of Health emergency teams on hotlines: 0729471414 and 0732353535 </i></strong>
+          </div>
+      </mat-card>
+
+      <mat-card *ngIf="high" class="panel-danger">
+          <div class="panel-heading">
+              Your RISK for COVID-19 is :::: <strong>HIGH</strong>
+          </div> <div style="text-align: right;">
+              <button (click)="backToQuiz()" mat-raised-button color="warn">
+                  <mat-icon class="mat-18">clear</mat-icon> Close
+              </button>
+          </div><hr>
+          <div>
+              Please ensure you do the following: <br>
+              <mat-list role="list">
+                  <mat-list-item role="listitem">1. Stay at Home </mat-list-item>
+                  <mat-list-item role="listitem">2. Do not travel using Public means</mat-list-item>
+                  <mat-list-item role="listitem">3. Stay in a separate room </mat-list-item>
+                  <mat-list-item role="listitem">4. Avoid Sharing of Utensils </mat-list-item>
+                  <mat-list-item role="listitem">5. Do not Share Towels or bedings </mat-list-item>
+                  <mat-list-item role="listitem">6. Use a separate bathroom if available</mat-list-item>
+                </mat-list>          
+             
+              <small>----- This is to avoid transmission of the virus to friends and family. ----</small> <br> <br>
+           <strong> <i> N/B:  For more information on COVID-19, call 719 or *719#. You can also contact the Ministry of Health emergency teams on hotlines: 0729471414 and 0732353535 </i></strong>
+          </div>
+      </mat-card>
+    </div>
+    
+  
+
+  </div>
+
+</div>
+
+<div style="text-align: center;">
+    <small>This Tool has been Developed by <a href="https://www.zyptech.co.ke">Zyptech Computers Ltd</a> with information from the Ministry of Health.</small>
+</div>
